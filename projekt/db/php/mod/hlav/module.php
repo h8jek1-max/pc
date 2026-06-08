@@ -1,0 +1,1 @@
+<?php return ['name' => 'Hlavní', 'icon' => '◈', 'order' => 1];
