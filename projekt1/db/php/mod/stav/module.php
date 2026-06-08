@@ -1,1 +1,0 @@
-<?php return ['name' => 'Stavebnice', 'icon' => '⚙️', 'order' => 2];
