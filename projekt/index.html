@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="cs" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn4y/PC90ZXh0Pjwvc3ZnPg==">
+    <title>PC</title>
+ <!--    <link rel="stylesheet" href="db\tema\css\ui.css">#2b402b -->
+<style>
+:root {
+    --bg: #f4f7f4; --surface: #ffffff; --text: #1c241c; --text-dim: #5a6b5a;
+    --primary: #406240; --primary-hover: #bed4be; --primary-dim: #e5ebe5;
+    --accent: #759b75; --border: #ccd9cc; --danger: #d32f2f; --danger-bg: #ffebee;
+    --warning: #e65100; --warning-bg: #fff3e0;
+    --info: #0277bd; --info-bg: #e1f5fe;
+    --radius: 12px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.05);
+    --transition: 0.2s;
+}
+[data-theme="dark"] {
+    --bg: #0d100d; --surface: #141814; --text: #e5ebe5; --text-dim: #8fa38f;
+    --primary: #547d54; --primary-hover: #759b75; --primary-dim: #1b241b;
+    --border: #243524; --shadow: 0 4px 20px rgba(0,0,0,0.3);
+    --danger-bg: #2d1515; --warning-bg: #2d1f0a; --info-bg: #0a1e2d;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; transition: var(--transition); }
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0.6rem 1rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; gap: 0.5rem; }
+
+/* .nav-wrap { display: flex; gap: 0.4rem; overflow-x: auto; flex: 1; padding: 0 0.5rem; } */
+.nav-wrap { display:flex; gap:0.4rem; align-items:center; flex: 1; padding-left: 10px; }
+.nav-wrap1 { display:flex; gap:0.4rem; align-items:center; }
+
+
+main { padding: 1.5rem; max-width: 1400px; margin: 0 auto; width: 100%; flex: 1; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem; background: var(--primary); color: #fff; border: none; border-radius: 8px; padding: 0 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); min-height: 36px; font-size: 0.99rem; white-space: nowrap; }
+.btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+
+/* .btn:active { transform: translateY(0); } */
+.btn.active { background: var(--primary-hover); transform: translateY(-1px); }
+.btn.active:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { background: var(--primary-dim); border-color: var(--primary); }
+.btn-danger { background: var(--danger); }
+.btn-danger:hover { background: #b71c1c; }
+.btn-sm { min-height: 28px; padding: 0 0.6rem; font-size: 0.78rem; }
+.btn-xs { min-height: 24px; padding: 0 0.4rem; font-size: 0.72rem; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; box-shadow: var(--shadow); margin-bottom: 1rem; }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.form-group { margin-bottom: 0.75rem; }
+.form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text-dim); margin-bottom: 0.25rem; }
+.input { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.75rem; min-height: 36px; outline: none; font-size: 0.9rem; font-family: inherit; transition: var(--transition); }
+.input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-dim); }
+select.input { cursor: pointer; }
+textarea.input { resize: vertical; min-height: 80px; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 0.72rem; font-weight: bold; background: var(--primary-dim); color: var(--primary); }
+.badge-danger { background: var(--danger-bg); color: var(--danger); }
+.badge-warning { background: var(--warning-bg); color: var(--warning); }
+.badge-info { background: var(--info-bg); color: var(--info); }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.flex-gap { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.text-dim { color: var(--text-dim); }
+.text-sm { font-size: 0.82rem; }
+.text-xs { font-size: 0.72rem; }
+.monospace { font-family: 'Courier New', monospace; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 0.75rem 0; }
+#toast-zone { position: fixed; bottom: 20px; right: 20px; z-index: 9000; display: flex; flex-direction: column; gap: 8px; }
+.toast { background: var(--primary); color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; animation: slideUp 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+.toast.err { background: var(--danger); }
+.toast.warn { background: var(--warning); }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.pc-modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 8000; display: flex; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(2px); }
+.pc-modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 12px 40px rgba(0,0,0,0.4); max-height: 90vh; overflow-y: auto; width: 600px; max-width: 100%; padding: 1.5rem; }
+.pc-modal-foot { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 1rem; }
+.tab-btn { padding: 0.5rem 1rem; cursor: pointer; border: none; background: none; color: var(--text-dim); font-size: 0.85rem; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: var(--transition); }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+.code-block { background: #0d1117; color: #c9d1d9; border-radius: 8px; padding: 1rem; font-family: 'Courier New', monospace; font-size: 0.8rem; overflow-x: auto; border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+    <header>
+	
+        <div style="font-size:1.2rem; letter-spacing:-0.5px; font-weight:900; color:var(--primary);">🌿 PC</div>
+		
+        <div class="nav-wrap" > <!-- style="" nav-btn font-weight:900; font-size:1.2rem; letter-spacing:-0.5px;  nav- -->
+		
+                <button class="btn btn-outline nav-btn" id="nav-hlav" onclick="PC.router.load('hlav');">
+					Hlavní
+                </button>
+		
+                <button class="btn btn-outline nav-btn" id="nav-stav" onclick="PC.router.load('stav');">
+					Stavebnice
+                </button>
+				
+        </div>
+		
+        <div  class="nav-wrap1" >
+		
+            <button class="btn btn-outline" onclick="PC.diagnostics.showConsole()" title="Log konzole">🖥️</button>
+            <!-- <button class="btn btn-outline" onclick="PC.diagnostics.exportSystemMap()" title="Mapa systému pro AI" style="color:var(--primary);">🧠</button> -->
+            <button class="btn btn-outline" onclick="PC.theme.toggle()" title="Přepnout motiv">🌓</button>
+			
+        </div>
+		
+    </header>
+	
+    <main id="view"></main>
+	
+</div>
+
+<script>
+   // document.addEventListener('DOMContentLoaded', () => PC.init(''));
+function _esc(s) {
+    if (s == null) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+window._esc = _esc;
+
+window.PC = {
+    _csrf: '',
+    _currentModule: '',
+    _ready: false,
+	_routerRequestId: 0, 
+	
+// --- Globální úložiště uvnitř objektu PC ---
+_cache: {},          // Úložiště: { "klic": data }
+_cacheIndex: [],     // Metadata pro LRU a exspiraci: [ { klic, time, expires, size }, ... ]
+_cacheLimitBytes: 5 * 1024 * 1024, // 5 MB limit
+
+// --- JEDNOTNÁ KONFIGURACE CACHE PRO CELÝ WEB ---
+_cacheRules: {
+    // modul: { akce: TTL_V_MILISEKUNDÁCH }
+    "stav": {
+        "synapse_search": 0, //30 *  30 sekund5 * 60 * 1000
+        "synapse_vazby": 0, // 5 minut5 * 60 * 1000
+        "components": 0, // 5 minut5 * 60 * 1000
+        "scan_context": 0, // 10 minut10 * 60 * 1000
+		"render": 10 * 60 * 1000 // Globální pravidlo pro šablony modulů (10 minut)
+    },
+    // Zde můžete jednoduše přidávat další moduly a jejich akce:
+    "produkty": {
+        "list": 60 * 1000 // 1 minuta
+    },
+    "hlav": { 
+		"render": 10 * 60 * 1000 // Globální pravidlo pro šablony modulů (10 minut)
+    }
+},
+
+_getCacheSize(obj) {
+    return JSON.stringify(obj).length * 2;
+},
+
+init(csrf) {
+    this._csrf = csrf;
+    this.theme.init();
+    this.diagnostics.init();
+    hash = location.hash 
+        ? decodeURIComponent(location.hash.replace('#', ''))
+              .slice(0, 4)
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .toLowerCase()
+        : 'hlav';
+	this.router.load(hash);
+    this._ready = true;
+},
+
+loadModuleFromHash(h) {
+		document.title = `PC ` + h;
+		location.hash = h;
+    hash = location.hash 
+        ? decodeURIComponent(location.hash.replace('#', ''))
+              .slice(0, 4)
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .toLowerCase()
+        : 'hlav';
+	if ( this._currentModule !== hash ) {
+		this.router.load(hash);
+	} 
+},
+
+// Čtvrtý argument (cacheOpts) byl odstraněn, vše se řídí automaticky z _cacheRules
+async api(module, action, data = {}, lokalniTTL = null) {
+    if (window.location.protocol === 'file:') {
+        console.log("Stránka je spuštěna lokálně z disku. Lokace: " + window.location.protocol);
+        return null;
+    }
+
+    const cacheKlic = `${module}_${action}_${JSON.stringify(data)}`;
+    const ted = Date.now();
+
+    // 2. CHYTRÉ URČENÍ TTL:
+    // Pokud je předáno lokalniTTL, použije se to.
+    // Jinak se zkontroluje akce 'render' z tabulky.
+    // Jinak se zkontroluje specifické pravidlo pro modul a akci z tabulky.
+    const povoleneTTL = lokalniTTL !== null 
+        ? lokalniTTL 
+        : (action === 'render' ? this._cacheRules['render'] : (this._cacheRules[module]?.[action] || null));
+
+    // 1. AUTOMATICKÉ ZJIŠTĚNÍ TTL Z NAŠÍ TABULKY
+    // Podívá se, zda existuje pravidlo pro tento modul a tuto akci
+    //const povoleneTTL = this._cacheRules[module]?.[action] || null;
+	// Tento řádek uvnitř PC.api nahraďte:
+//const povoleneTTL = action === 'render' ? this._cacheRules['render'] : (this._cacheRules[module]?.[action] || null);
+
+    // 2. POKUS O NAČTENÍ Z CACHE (pokud pro akci existuje pravidlo)
+    if (povoleneTTL !== null && this._cache[cacheKlic]) {
+        const indexPolozka = this._cacheIndex.find(item => item.klic === cacheKlic);
+        
+        if (indexPolozka && indexPolozka.expires > ted) {
+            console.log(`API Cache HIT: Používám paměť pro ${module}/${action}`);
+            indexPolozka.time = ted; // Aktualizace pro LRU
+            return this._cache[cacheKlic];
+        } else {
+            // Data exspirovala
+            this._cacheIndex = this._cacheIndex.filter(item => item.klic !== cacheKlic);
+            delete this._cache[cacheKlic];
+        }
+    }
+
+    // 3. POŽADAVEK NA SERVER
+    try {
+        const body = { module, action, data, csrf: this._csrf };
+        const res = await fetch('db/php/api.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+        
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        if (!json.success) throw new Error(json.error || 'Neznámá chyba API');
+
+        // 4. AUTOMATICKÉ ULOŽENÍ DO CACHE (pokud pro akci existuje pravidlo)
+        if (povoleneTTL !== null && json.data) {
+            this._cache[cacheKlic] = json.data;
+            const dataSize = this._getCacheSize(json.data);
+            
+            this._cacheIndex.push({
+                klic: cacheKlic,
+                time: ted,
+                expires: ted + povoleneTTL, // Použije se TTL z naší tabulky
+                size: dataSize
+            });
+            
+            this._enforceCacheLimit();
+        }
+//alert(json.tabulky.);
+        return json.data;
+
+    } catch (e) {
+        // Čistka cache při chybě
+        if (this._cache[cacheKlic]) {
+            this._cacheIndex = this._cacheIndex.filter(item => item.klic !== cacheKlic);
+            delete this._cache[cacheKlic];
+            console.warn(`API Cache: Odstraněn klíč '${cacheKlic}' kvůli chybě: ${e.message}`);
+        }
+        throw e;
+    }
+},
+
+// --- UPRAVENÝ ROUTER S OCHRANOU PROTI ZBĚSILÉMU KLIKÁNÍ ---
+router: {
+    async load(mod) { 
+        // 1. Zvýšíme ID požadavku – každé kliknutí má své unikátní, stále rostoucí číslo
+        PC._routerRequestId++;
+        const aktualniId = PC._routerRequestId;
+
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('nav-' + mod)?.classList.add('active');
+        
+        const view = document.getElementById('view');
+        view.innerHTML = '<div style="padding:2rem; color:var(--text-dim); text-align:center;">Načítám…</div>';
+        
+        try {
+            // Zavoláme API (buď vrátí bleskově z cache, nebo asynchronně stáhne ze serveru)
+            //const html = await PC.api(mod, 'render', {}, { ttl: 10 * 60 * 1000 });
+			// Staré: const html = await PC.api(mod, 'render', {}, { ttl: ... });
+// NOVÉ ČISTÉ VOLÁNÍ:
+//
+const html = await PC.api(mod, 'render');
+
+
+            // 🔥 OCHRANA: Pokud mezitím uživatel kliknul na jiný modul, PC._routerRequestId se zvýšilo.
+            // V tom případě tento rozpracovaný požadavek ignorujeme a ukončíme funkci.
+            if (aktualniId !== PC._routerRequestId) {
+                console.log(`Router: Požadavek na modul '${mod}' byl zrušen, protože uživatel kliknul jinam.`);
+                return; 
+            }
+
+            // 2. Vykreslení HTML (provede se jen, pokud je toto kliknutí stále to nejnovější)
+            view.innerHTML = html.html || html;
+
+            // 3. Spuštění doprovodného JS
+            if (html.js) {
+                const oldScript = document.getElementById('pc-dynamic-script');
+                if (oldScript) oldScript.remove();
+                
+                const script = document.createElement('script');
+                script.id = 'pc-dynamic-script';
+                script.textContent = html.js;
+                document.body.appendChild(script);
+            }
+
+            // 4. Inicializace logiky modulu
+            const modInit = mod.toUpperCase().replace(/-/g, '_');
+            if (window[modInit]?.init) {
+                window[modInit].init();
+            } else if (window['BV4'] && mod === 'stav') {
+                BV4.init();
+            } else if (window['DB_BROWSER'] && mod === 'dbpr') {
+                DB_BROWSER.init();
+            }
+
+            PC._currentModule = mod;
+            
+            const jmenoModulu = html.module?.name || mod;
+            PC.loadModuleFromHash(jmenoModulu);
+		
+			if (document.getElementById('nav-' + mod) === null || mod === 'stav' ) {
+					document.getElementById('nav-stav').innerHTML = jmenoModulu;
+					document.getElementById('nav-stav')?.classList.add('active');
+					document.getElementById('nav-stav').onclick = function() {
+						PC.router.load(mod);
+					}
+			}
+
+        } catch (e) {
+            // OCHRANA I V CHYBĚ: Pokud selhal starý požadavek, nebudeme uživateli kazit obrazovku chybou
+            if (aktualniId !== PC._routerRequestId) return;
+
+            view.innerHTML = `<div class="card" style="border-color:var(--danger)"><h3 style="color:var(--danger)">Chyba modulu: ${_esc(mod)}</h3><p>${_esc(e.message)}</p></div>`;
+        }
+    }
+},
+
+_enforceCacheLimit() {
+    let celkovaVelikost = this._cacheIndex.reduce((sum, item) => sum + item.size, 0);
+    let smazanoCokoliv = false;
+
+    // Pokud jsme přes limit, mažeme nejstarší položky
+    while (celkovaVelikost > this._cacheLimitBytes && this._cacheIndex.length > 0) {
+        this._cacheIndex.sort((a, b) => a.time - b.time);
+        const nejstarsi = this._cacheIndex.shift();
+        delete this._cache[nejstarsi.klic];
+        
+        console.warn(`[Cache LRU] 🗑️ Smazán nejstarší klíč '${nejstarsi.klic}' kvůli zaplnění.`);
+        smazanoCokoliv = true;
+        
+        celkovaVelikost = this._cacheIndex.reduce((sum, item) => sum + item.size, 0);
+    }
+
+    // Po vyčištění (nebo pokud ke smazání nedošlo) zalogujeme aktuální stav v %
+    this._logCacheStatus(celkovaVelikost);
+},
+
+// Nová pomocná metoda pro vizuální logování stavu paměti
+_logCacheStatus(aktualniVelikost) {
+    // Spočítáme procenta (na jedno desetinné místo)
+    const procenta = ((aktualniVelikost / this._cacheLimitBytes) * 100).toFixed(1);
+    
+    // Převedeme bajty na srozumitelné kilobajty (KB)
+    const kbAktualni = (aktualniVelikost / 1024).toFixed(1);
+    const kbLimit = (this._cacheLimitBytes / 1024).toFixed(1);
+
+    // Zvolíme barvu logu podle zaplnění (do 70% zelená, do 90% oranžová, nad 90% červená)
+    let barva = '#2ecc71'; // zelená
+    if (procenta > 70) barva = '#f39c12'; // oranžová
+    if (procenta > 90) barva = '#e74c3c'; // červená
+
+    // Vypíšeme do konzole stylovanou zprávu
+    console.log(
+        `%c[Cache Status] 🧠 Zaplněno z ${procenta}% (${kbAktualni} KB / ${kbLimit} KB) | Celkem položek: ${this._cacheIndex.length}`, 
+        `color: ${barva}; font-weight: bold;`
+    );
+},
+
+// --- POMOCNÁ METODA PRO RUČNÍ MAZÁNÍ CACHE ---
+// Použití: 
+// PC.clearCache()                     -> Smaže úplně všechno
+// PC.clearCache('produkty')           -> Smaže všechnu cache spojenou s modulem 'produkty'
+// PC.clearCache('produkty', 'get')    -> Smaže pouze konkrétní akci 'get' v modulu 'produkty'
+clearCache(module = null, action = null) {
+    if (!module) {
+        // A. Kompletní promazání celé cache
+        this._cache = {};
+        this._cacheIndex = [];
+        console.log("Cache: Celá paměť byla kompletně vymazána.");
+        return;
+    }
+
+    // B. Selektivní promazání podle modulu nebo akce
+    const prefix = action ? `${module}_${action}_` : `${module}_`;
+    
+    // Odstraníme položky z indexu a z paměti
+    this._cacheIndex = this._cacheIndex.filter(item => {
+        if (item.klic.startsWith(prefix)) {
+            delete this._cache[item.klic];
+            console.log(`Cache: Ručně smazán klíč '${item.klic}'.`);
+            return false; // Odstranit z indexu
+        }
+        return true; // Ponechat v indexu
+    });
+},
+
+    toast(msg, type = 'ok', duration = 3500) {
+        let zone = document.getElementById('toast-zone');
+        if (!zone) { zone = document.createElement('div'); zone.id = 'toast-zone'; document.body.appendChild(zone); }
+        const t = document.createElement('div');
+        t.className = `toast${type === 'err' ? ' err' : type === 'warn' ? ' warn' : ''}`;
+        t.textContent = msg;
+        zone.appendChild(t);
+        setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(20px)'; t.style.transition = '0.3s'; setTimeout(() => t.remove(), 300); }, duration);
+    },
+
+    theme: {
+        init() {
+            const saved = localStorage.getItem('pc_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+        },
+        toggle() {
+            const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('pc_theme', next);
+        }
+    },
+
+    diagnostics: {
+        init() {
+            window.onerror = (msg, src, lineno) => PC.api('system', 'log_js', { msg: `${msg} v ${src}:${lineno}` }).catch(() => {});
+            window.addEventListener('unhandledrejection', e => PC.api('system', 'log_js', { msg: `Promise: ${e.reason}` }).catch(() => {}));
+        },
+
+        async showConsole() {
+            try {
+const logs = await PC.api('system', 'get_logs');
+let rows = '';
+
+(logs || []).forEach(l => {
+    const color = l.type === 'error' ? 'var(--danger)' : l.type === 'warning' ? 'var(--warning)' : 'inherit';
+    rows += `<div style="color:${color}; border-bottom:1px solid var(--border); padding:4px 0; font-size:12px;">[${_esc(l.time)}] <strong>${_esc(l.type)}</strong>: ${_esc(l.msg)}`;
+    if (l.data) {
+        try { // Pokud je l.data stále jako text (JSON string), převedeme ho na pole/objekt
+            const extraData = typeof l.data === 'string' ? JSON.parse(l.data) : l.data;
+            // Pokud jde o pole, proženeme ho přes map a join
+            if (Array.isArray(extraData)) {
+                if (extraData.length > 0) { rows += ' | Data: ' + extraData.map(item => _esc(String(item))).join(', '); } } 
+            // Pokud je to objekt (klíč: hodnota), vypíšeme ho srozumitelně
+            else if (typeof extraData === 'object') { const keys = Object.keys(extraData);
+                if (keys.length > 0) { rows += ' | Data: ' + keys.map(k => `<strong>${_esc(k)}</strong>: ${_esc(String(extraData[k]))}`).join(', '); } }
+        } catch (e) { // Pokud by JSON.parse selhal, vypíšeme data aspoň jako surový oescapovaný text
+            rows += ' | Data: ' + _esc(String(l.data)); }
+    } rows += `</div>`; });
+
+            PC._openModal(`
+                <div class="flex-between" style="margin-bottom:1rem;">
+                    <h3>🖥️ Log Systému</h3>
+                    <button class="btn btn-outline btn-sm" onclick="PC._closeModal()">✕ Zavřít</button>
+                </div>
+                <div class="code-block" style="max-height:60vh; overflow-y:auto;">${rows || '<div class="text-dim">Žádné záznamy.</div>'}</div>
+            `);
+			} catch (e) {
+				PC._openModal(' <div class="flex-between" style="margin-bottom:1rem;"> <h3>🖥️  Log Systému</h3> <button style="font-size:0.95rem; letter-spacing:-0.5px; margin-right: 20px;  padding: 10px; "  class="btn btn-outline btn-sm" onclick="PC._closeModal()">✕ Zavřít</button> </div> <div class="code-block" style="max-height:60vh; overflow-y:auto;"><div class="text-dim">Nelze načíst Log Systému: ' + e.message + '</div></div>' );
+            }
+        },
+/*                 PC._openModal( ' <button style="font-size:0.95rem; letter-spacing:-0.5px; margin-right: 20px;  padding: 10px; " class="btn btn-outline btn-sm" onclick="PC._closeModal()">✕  Zavřít </button> ' + ' Nelze načíst Log Systému: ' + e.message ); */
+        async exportSystemMap() {
+            try {
+                const mapData = await PC.api('system', 'get_map');
+                const json = JSON.stringify(mapData, null, 2);
+                PC._openModal(`
+                    <div class="flex-between" style="margin-bottom:1rem;">
+                        <h3 style="color:var(--primary);">🧠 Mapa Systému (pro AI)</h3>
+                        <button class="btn btn-outline btn-sm" onclick="PC._closeModal()">✕</button>
+                    </div>
+                    <p class="text-dim text-sm" style="margin-bottom:0.75rem;">
+                        Zkopíruj a vlož do promptu AI pro přesné pochopení struktury platformy.
+                    </p>
+                    <textarea id="ai-map-output" class="input monospace" style="height:50vh; font-size:11px; resize:none;" readonly>${_esc(json)}</textarea>
+                    <button class="btn" style="margin-top:0.75rem; width:100%;"
+                        onclick="navigator.clipboard.writeText(document.getElementById('ai-map-output').value).then(()=>PC.toast('Zkopírováno!','ok'))">
+                        📋 Kopírovat pro AI
+                    </button>
+                `, '800px');
+            } catch (e) {
+                PC.toast('Nelze načíst mapu: ' + e.message, 'err');
+            }
+        }
+    },
+
+    _openModal(html, width = '620px') {
+        this._closeModal();
+        const bg = document.createElement('div');
+        bg.id = 'pc-modal-bg';
+        bg.className = 'pc-modal-bg';
+        bg.onclick = e => { if (e.target === bg) PC._closeModal(); };
+        bg.innerHTML = `<div class="pc-modal" style="width:${width}; max-width:100%;">${html}</div>`;
+        document.body.appendChild(bg);
+    },
+    _closeModal() {
+        document.getElementById('pc-modal-bg')?.remove();
+    },
+};
+
+/*if (window.location.protocol === 'file:') {
+  console.log("Stránka je spuštěna lokálně z disku. Inicializace byla zablokována, aby se zachovalo statické HTML. Lokace: " + window.location.protocol );
+} else*/ if (!(window.PC && PC._ready)) {
+
+  fetch('db/php/api.php', {
+    method: 'POST',
+    headers: {
+      'Accept': 'text/plain',
+      'Content-Type': 'text/plain'
+    }
+  })
+  .then(response => response.text())
+.then(rawData => {
+  const data = rawData.trim();
+  const validniFormat = /^\d+$|^[a-fA-F0-9]{64}$/.test(data);
+
+  if (validniFormat && data !== '') {
+    const argumentProInit = /^\d+$/.test(data) ? Number(data) : data; 
+    
+    // 1. Inicializace se spustí POUZE JEDNOU při načtení dat
+    PC.init(argumentProInit); 
+    
+    // 2. Sledování změn v URL adresách s hashem (#)
+    window.addEventListener('hashchange', () => {
+      if (window.PC && PC._ready) {
+        // Při změně hashe už nevoláme celé PC.init(), ale rovnou předáme nový modul routeru
+        PC.loadModuleFromHash( decodeURIComponent(location.hash.replace('#', '')) );
+      }
+    });
+
+  } else {
+    console.error("Data neodpovídají číslu ani platnému hashi. Obdrženo:", data);
+  }
+})
+  .catch(error => console.error("Chyba při fetchi:", error));
+}
+
+
+</script>
+
+</body>
+</html>

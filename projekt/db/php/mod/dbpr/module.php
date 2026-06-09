@@ -1,0 +1,1 @@
+<?php return ['name' => 'DBprohlížeč', 'icon' => '◈', 'order' => 3];

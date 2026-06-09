@@ -1,0 +1,3 @@
+{"time":"12:44:32","type":"warning","msg":"Pomalý dotaz: 233.26683044434ms","data":{"table":"synapse_uzly","action":"select"}}
+{"time":"12:48:25","type":"system","msg":"Samooptimalizace: Automaticky generuji trvalý binární index pro 'synapse_vlastnosti.uzel_id' (100x hledáno).","data":[]}
+{"time":"12:50:42","type":"error","msg":"API Gateway: API endpoint neexistuje: dbpr\/db_get_linked ","data":{"file":"\/opt\/lampp\/htdocs\/projekt\/db\/php\/api.php","line":441,"err":"API endpoint neexistuje: dbpr\/db_get_linked "}}
